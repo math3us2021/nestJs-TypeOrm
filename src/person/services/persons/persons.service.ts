@@ -2,7 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { PersonModel } from '../../../typeorm/entities/person.model';
 import { Repository } from 'typeorm';
-import { CreatePerson } from '../../../utils/types';
+import { CreatePerson, UpdatePersonParams } from '../../../utils/types';
 
 @Injectable()
 export class PersonsService {
@@ -11,11 +11,16 @@ export class PersonsService {
     private model: Repository<PersonModel>,
   ) {}
 
-  // eslint-disable-next-line @typescript-eslint/no-empty-function
-  findPerson() {}
+  findPerson() {
+    return this.model.find();
+  }
 
   createPerson(personDetails: CreatePerson) {
     const newPerson = this.model.create(personDetails);
     return this.model.save(newPerson);
+  }
+
+  updatePerson(personDetails: UpdatePersonParams, id: number) {
+    return this.model.update({ id }, { ...personDetails });
   }
 }
