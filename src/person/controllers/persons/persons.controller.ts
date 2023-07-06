@@ -1,6 +1,7 @@
 import {
   Body,
   Controller,
+  Delete,
   Get,
   Param,
   ParseIntPipe,
@@ -9,7 +10,7 @@ import {
 } from '@nestjs/common';
 import { CreatePersonDto } from '../../dtos/createPerson.dto';
 import { PersonsService } from '../../services/persons/persons.service';
-import { UpdatePerson } from '../../../../dist/person/dtos/updatePerson';
+import { UpdatePersonDto } from '../../dtos/updatePerson.dto';
 
 @Controller('persons')
 export class PersonsController {
@@ -24,11 +25,18 @@ export class PersonsController {
   createPerson(@Body() data: CreatePersonDto) {
     return this.personService.createPerson(data);
   }
+
   @Put(':id')
   async updatePerson(
     @Param('id', ParseIntPipe) id: number,
-    @Body() data: UpdatePerson,
+    @Body() data: UpdatePersonDto,
   ) {
     return await this.personService.updatePerson(data, id);
+  }
+
+  @Delete(':id')
+  async deletePerson(@Param('id', ParseIntPipe) id: number) {
+    await this.personService.deletePerson(id);
+    return 'Person deleted successfully';
   }
 }

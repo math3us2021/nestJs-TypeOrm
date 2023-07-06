@@ -23,4 +23,8 @@ export class PersonsService {
   updatePerson(personDetails: UpdatePersonParams, id: number) {
     return this.model.update({ id }, { ...personDetails });
   }
+
+  deletePerson(id: number) {
+    this.model.delete({ id });
+  }
 }
