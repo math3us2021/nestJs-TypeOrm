@@ -2,6 +2,8 @@ import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { PersonModel } from './typeorm/entities/person.model';
 import { PersonModule } from './person/person.module';
+import { Profile } from './typeorm/entities/profile';
+import { PersonsController } from './person/controllers/persons/persons.controller';
 
 @Module({
   imports: [
@@ -12,7 +14,7 @@ import { PersonModule } from './person/person.module';
       username: 'root',
       password: 'ma020490@',
       database: 'crud_typeorm',
-      entities: [PersonModel],
+      entities: [PersonModel, Profile],
       synchronize: true,
     }),
     PersonModule,

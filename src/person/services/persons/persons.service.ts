@@ -1,23 +1,39 @@
-import { Injectable } from '@nestjs/common';
+import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { PersonModel } from '../../../typeorm/entities/person.model';
 import { Repository } from 'typeorm';
-import { CreatePerson, UpdatePersonParams } from '../../../utils/types';
+import {
+  CreatePerson,
+  CreateProfile,
+  UpdatePersonParams,
+} from '../../../utils/types';
+import { Profile } from '../../../typeorm/entities/profile';
 
 @Injectable()
 export class PersonsService {
   constructor(
     @InjectRepository(PersonModel)
     private model: Repository<PersonModel>,
+    @InjectRepository(Profile)
+    private profile: Repository<Profile>,
   ) {}
 
   findPerson() {
     return this.model.find();
   }
 
-  createPerson(personDetails: CreatePerson) {
+  async createPerson(id: number, personDetails: CreatePerson) {
+    const user = await this.profile.findOneBy({ id });
+    if (!user) {
+      throw new HttpException(
+        'Usuario não encontrado, cadastre o username primeiro',
+        HttpStatus.BAD_REQUEST,
+      );
+    }
     const newPerson = this.model.create(personDetails);
-    return this.model.save(newPerson);
+    const savePerson = await this.model.save(newPerson);
+    user.profile = savePerson;
+    return this.profile.save(user);
   }
 
   updatePerson(personDetails: UpdatePersonParams, id: number) {
@@ -26,5 +42,14 @@ export class PersonsService {
 
   deletePerson(id: number) {
     this.model.delete({ id });
+  }
+
+  getProfile() {
+    return this.profile.find();
+  }
+
+  createProfile(profileDetails: CreateProfile) {
+    const newProfile = this.profile.create(profileDetails);
+    return this.profile.save(newProfile);
   }
 }

@@ -21,9 +21,12 @@ export class PersonsController {
     return this.personService.findPerson();
   }
 
-  @Post()
-  createPerson(@Body() data: CreatePersonDto) {
-    return this.personService.createPerson(data);
+  @Post(':id')
+  createPerson(
+    @Param('id', ParseIntPipe) id: number,
+    @Body() data: CreatePersonDto,
+  ) {
+    return this.personService.createPerson(id, data);
   }
 
   @Put(':id')

@@ -9,3 +9,8 @@ export type UpdatePersonParams = {
   age: number;
   email: string;
 };
+
+export type CreateProfile = {
+  username: string;
+  password: string;
+};

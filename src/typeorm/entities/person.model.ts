@@ -1,4 +1,12 @@
-import { Entity, Column, PrimaryGeneratedColumn } from 'typeorm';
+import {
+  Entity,
+  Column,
+  PrimaryGeneratedColumn,
+  OneToOne,
+  JoinColumn,
+} from 'typeorm';
+import { Profile } from './profile';
+
 @Entity()
 export class PersonModel {
   @PrimaryGeneratedColumn()
