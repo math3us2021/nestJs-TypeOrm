@@ -5,10 +5,12 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { PersonModel } from '../typeorm/entities/person.model';
 import { ProfileController } from './controllers/profile/profile.controller';
 import { Profile } from '../typeorm/entities/profile';
+import { Posts } from '../typeorm/entities/posts';
+import { PostsController } from './controllers/posts/posts.controller';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([PersonModel, Profile])],
-  controllers: [PersonsController, ProfileController],
+  imports: [TypeOrmModule.forFeature([PersonModel, Profile, Posts])],
+  controllers: [PersonsController, ProfileController, PostsController],
   providers: [PersonsService],
 })
 export class PersonModule {}

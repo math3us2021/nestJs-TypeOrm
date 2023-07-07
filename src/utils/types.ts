@@ -14,3 +14,8 @@ export type CreateProfile = {
   username: string;
   password: string;
 };
+
+export type CreatePosts = {
+  title: string;
+  description: string;
+};

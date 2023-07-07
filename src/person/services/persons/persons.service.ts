@@ -4,10 +4,12 @@ import { PersonModel } from '../../../typeorm/entities/person.model';
 import { Repository } from 'typeorm';
 import {
   CreatePerson,
+  CreatePosts,
   CreateProfile,
   UpdatePersonParams,
 } from '../../../utils/types';
 import { Profile } from '../../../typeorm/entities/profile';
+import { Posts } from '../../../typeorm/entities/posts';
 
 @Injectable()
 export class PersonsService {
@@ -16,6 +18,8 @@ export class PersonsService {
     private model: Repository<PersonModel>,
     @InjectRepository(Profile)
     private profile: Repository<Profile>,
+    @InjectRepository(Posts)
+    private posts: Repository<Posts>,
   ) {}
 
   findPerson() {
@@ -45,11 +49,29 @@ export class PersonsService {
   }
 
   getProfile() {
-    return this.profile.find();
+    return this.profile.find({ relations: ['profile', 'posts'] });
   }
 
   createProfile(profileDetails: CreateProfile) {
     const newProfile = this.profile.create(profileDetails);
     return this.profile.save(newProfile);
+  }
+
+  getPosts() {
+    return this.posts.find();
+  }
+  async createPosts(id: number, postsDetails: CreatePosts) {
+    const user = await this.profile.findOneBy({ id });
+    if (!user) {
+      throw new HttpException(
+        'Usuario não encontrado, cadastre o username primeiro',
+        HttpStatus.BAD_REQUEST,
+      );
+    }
+    const newPosts = this.posts.create({
+      ...postsDetails,
+      user: user,
+    });
+    return this.posts.save(newPosts);
   }
 }

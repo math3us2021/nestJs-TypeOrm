@@ -7,7 +7,7 @@ import {
 } from 'typeorm';
 import { Profile } from './profile';
 
-@Entity()
+@Entity() /// se eu passar o nome aqui dentro ele vai criar uma tabela com o nome que eu passar
 export class PersonModel {
   @PrimaryGeneratedColumn()
   id: number;

@@ -4,6 +4,7 @@ import { PersonModel } from './typeorm/entities/person.model';
 import { PersonModule } from './person/person.module';
 import { Profile } from './typeorm/entities/profile';
 import { PersonsController } from './person/controllers/persons/persons.controller';
+import { Posts } from './typeorm/entities/posts';
 
 @Module({
   imports: [
@@ -14,7 +15,7 @@ import { PersonsController } from './person/controllers/persons/persons.controll
       username: 'root',
       password: 'ma020490@',
       database: 'crud_typeorm',
-      entities: [PersonModel, Profile],
+      entities: [PersonModel, Profile, Posts],
       synchronize: true,
     }),
     PersonModule,
